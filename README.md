@@ -1,6 +1,8 @@
 # k8s-learning-path
 ## Dificultades:
 - Aprender sobre helm charts. Gracias a ```helm create "nombre-app"```pude seguir las plantillas.
+- Lanzar Kubernetes en una VM. En sí, las configuraciones asociadas a esto como el host.
+- Enrutamiento de la api y la creacion de un middleware para recortar las rutas para que las reconozca nginx
 ### Terraform
 1. Ejecucion:
 - terraform init
