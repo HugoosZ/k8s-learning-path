@@ -1,0 +1,11 @@
+# Copia este archivo a terraform.tfvars y ajusta los valores segun el entorno.
+# cp terraform.tfvars.example terraform.tfvars
+
+# Requerido
+project_id   = "mi-proyecto-gcp"
+
+# Opcionales (si no se definen, Terraform usa los defaults de variables.tf)
+region       = "southamerica-west1"
+zone         = "southamerica-west1-a"
+machine_type = "e2-standard-2"
+disk_size    = 100
