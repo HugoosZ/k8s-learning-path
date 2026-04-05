@@ -14,11 +14,12 @@ service:
 
 ingress:
   enabled: true
-  className: ""
+  className: Traefik # Ingress controler nativo de k3s
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
+    # Esto le dice a Traefik que elimine el prefijo /api al pasar el tráfico
+    #traefik.ingress.kubernetes.io/router.middlewares: "default-stripprefix@kubernetescrd"
   hosts:
     - host: ""
       paths:
-        - path: /
+        - path: /api
           pathType: Prefix # Regla que permite buscar coincidencias basadas en el inicio de la ruta.
