@@ -15,7 +15,7 @@ service:
 ingress:
   enabled: true
   className: traefik # Ingress controler nativo de k3s
-  annotations: {}
+  annotations: 
     #Esto le dice a Traefik que elimine el prefijo /api al pasar el tráfico
     traefik.ingress.kubernetes.io/router.middlewares: "{{ .Release.Namespace }}-{{ .Values.appName }}-strip-prefix@kubernetescrd"
   hosts:
