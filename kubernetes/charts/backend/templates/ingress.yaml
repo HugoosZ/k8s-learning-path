@@ -5,10 +5,11 @@ metadata:
   name: {{ .Values.appName }}-ingress
   labels:
     app: {{ .Values.appName }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
+  annotations:     
+    traefik.ingress.kubernetes.io/router.middlewares: {{ include "backend.middlewareName" . | quote }} #Esto le dice a Traefik que elimine el prefijo /api al pasar el tráfico
+    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   {{- with .Values.ingress.className }}
   ingressClassName: {{ . }}
