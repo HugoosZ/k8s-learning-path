@@ -1,0 +1,13 @@
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.backup
+
+crash.log
+
+*.tfvars
+
+.terraform/
+
+mi-app-dummy/

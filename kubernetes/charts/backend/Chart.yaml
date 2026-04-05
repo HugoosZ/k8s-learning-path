@@ -1,0 +1,13 @@
+apiVersion: v2           
+name: backend    
+description: A Helm chart for Hugo's DevOps lab
+
+#'application' or a 'library'
+type: application
+
+# Cada vez que se cambies el YAML del chart, se debe actualizar esta versión.
+version: 0.1.0
+
+# Versión de la APP 
+appVersion: "1.0"
+
