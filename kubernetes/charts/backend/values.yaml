@@ -18,7 +18,7 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
   hosts:
-    - host: "34.176.243.245"
+    - host: ""
       paths:
         - path: /
           pathType: Prefix # Regla que permite buscar coincidencias basadas en el inicio de la ruta.
