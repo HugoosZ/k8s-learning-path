@@ -1,0 +1,16 @@
+appName: db
+replicaCount: 1
+
+image:
+  repository: postgres 
+  tag: 15-alpine # Version especifica de para asegurar que si se actualiza la imagen, no presente cambios que afecten la db.
+
+containerPort: 5432
+
+service:
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+  name: postgres
+
+

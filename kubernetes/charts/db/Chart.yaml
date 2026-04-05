@@ -1,6 +1,6 @@
 apiVersion: v2           
-name: backend    
-description: A backend Helm chart for Hugo's DevOps lab
+name: db    
+description: A db Helm chart for Hugo's DevOps lab
 
 #'application' or a 'library'
 type: application

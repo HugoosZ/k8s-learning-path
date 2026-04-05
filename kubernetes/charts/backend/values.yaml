@@ -8,8 +8,9 @@ image:
 containerPort: 80
 
 service:
-  type: ClusterIP
+  type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
   port: 80
+  targetPort: 80
 
 
 ingress:

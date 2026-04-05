@@ -3,6 +3,16 @@
 - Aprender sobre helm charts. Gracias a ```helm create "nombre-app"```pude seguir las plantillas.
 - Lanzar Kubernetes en una VM. En sí, las configuraciones asociadas a esto como el host.
 - Enrutamiento de la api y la creacion de un middleware para recortar las rutas para que las reconozca nginx
+- Como trabajar una contraseña de una base de datos como postgre en GCP.
+    - Crear un secret de contraseña:
+        - Primero hay que crear un namespace. En este caso "db".
+        - Luego se asigna la contraseña.
+  ```bash
+  kubectl create secret generic db-pass-secret \
+    --from-literal=password=clavesupersecreta \
+    -n db
+    ```
+    - Como alternativa segura, se puede usar google secret manager para que se descarguen las contraseñas de ahí o un cifrado asimetrico (Sealed Secrets).
 ### Terraform
 1. Ejecucion:
 - terraform init

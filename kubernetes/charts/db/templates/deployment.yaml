@@ -1,0 +1,31 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: {{ .Values.appName}}-deployment
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName}}
+    spec:
+      containers:
+        - name: {{ .Values.appName}}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort}}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-pass-secret # El name de la metadata del Secret
+                  key: password        # nombre de la variable que guarda la contraseña en el Secret 
+          volumeMounts:
+            - name: storage-db
+              mountPath: /var/lib/postgresql/data # Donde Postgres guarda los archivos
+      volumes:
+        - name: storage-db
+          emptyDir: {} # Volumen temporal para aprender
