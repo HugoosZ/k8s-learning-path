@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: project-root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/HugoosZ/k8s-learning-path'
+    targetRevision: HEAD
+    path: kubernetes/argocd/apps 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    #syncOptions:
+    #  - CreateNamespace=true no es necesario porque ya existe el namespace argocd.
+    automated:
+      prune: true
+      selfHeal: true
+      enabled: true
