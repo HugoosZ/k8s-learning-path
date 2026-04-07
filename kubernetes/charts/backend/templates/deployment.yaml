@@ -27,6 +27,6 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.config.db_password_secret }}"
+                  name: "{{ .Values.config.db_secret_name }}"
                   key: password
         
