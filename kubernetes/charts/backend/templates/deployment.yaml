@@ -19,14 +19,14 @@ spec:
             - containerPort: {{ .Values.containerPort}}
           env: 
             - name: DB_HOST
-              value: {{ .Values.config.db_host }}
+              value: "{{ .Values.config.db_host }}"
             - name: DB_PORT
-              value: {{ .Values.config.db_port }}
+              value: "{{ .Values.config.db_port }}"
             - name: DB_USER
-              value: {{ .Values.config.db_user }}
+              value: "{{ .Values.config.db_user }}" 
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.config.db_password_secret }}
+                  name: "{{ .Values.config.db_password_secret }}"
                   key: password
         
