@@ -1,0 +1,46 @@
+name: Build and Push Backend
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'src/backend/**'           # Cambió la ruta del código
+      - 'kubernetes/charts/backend/**' # Cambió la ruta de Helm
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }} # Necesario para que el bot pueda volver a subir cambios
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/backend
+          file: ./src/backend/dockerfile # Especificamos el dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-backend:${{ github.sha }}
+
+      - name: Update Helm Values
+        run: |
+          # Usamos sed para actualizar solo la línea del tag en el values.yaml
+          # Buscamos 'tag:' y reemplazamos lo que sigue por el nuevo hash
+          sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/backend/values.yaml
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add kubernetes/charts/backend/values.yaml
+          git commit -m "chore: update backend tag to ${{ github.sha }} [skip ci]" || echo "No changes to commit"
+          git pull --rebase origin main
+          git push origin main

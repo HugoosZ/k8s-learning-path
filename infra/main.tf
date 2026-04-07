@@ -41,6 +41,15 @@ resource "google_compute_instance" "k8s_node" {
         #!/bin/bash
         curl -sfL https://get.k3s.io | sh -
 
+        # 2. Instalar Docker
+        apt-get update
+        apt-get install -y docker.io
+        systemctl start docker
+        systemctl enable docker
+        
+        # Darle permisos a Hugo para Docker y K3s
+        usermod -aG docker hugo
+
         # Esperar a que el archivo de configuración exista antes de continuar
         until [ -f /etc/rancher/k3s/k3s.yaml ]; do
           echo "Esperando a K3s..."
