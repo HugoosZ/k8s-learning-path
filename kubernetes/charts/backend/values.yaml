@@ -2,15 +2,21 @@ appName: backend
 replicaCount: 3
 
 image:
-  repository: nginx # Imagen dummy por ahora
-  tag: alpine
+  repository: dressy/mi-backend
+  tag: v1
 
-containerPort: 80
+containerPort: 5000
 
 service:
   type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
   port: 80
-  targetPort: 80
+  targetPort: 5000
+
+config:
+  db_host: "db-service.db.svc.cluster.local"
+  db_port: "5432"
+  db_user: "postgres"
+  db_secret_name: "db-pass-secret"
 
 
 ingress:
@@ -22,3 +28,4 @@ ingress:
       paths:
         - path: /api
           pathType: Prefix # Regla que permite buscar coincidencias basadas en el inicio de la ruta.
+
