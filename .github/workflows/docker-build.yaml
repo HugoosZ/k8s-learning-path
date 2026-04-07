@@ -6,6 +6,7 @@ on:
     paths:
       - 'src/backend/**'           # Cambió la ruta del código
       - 'kubernetes/charts/backend/**' # Cambió la ruta de Helm
+      - '.github/workflows/docker-build.yaml' # Cambió en el workflow mismo
 
 jobs:
   build:
@@ -26,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./src/backend
-          file: ./src/backend/dockerfile # Especificamos el dockerfile
+          file: ./src/backend/Dockerfile # Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-backend:${{ github.sha }}
 
