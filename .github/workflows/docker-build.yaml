@@ -1,23 +1,33 @@
-name: Build and Push Backend
+name: Build and Push Apps
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - 'src/backend/**'           # Cambió la ruta del código
-      - 'kubernetes/charts/backend/**' # Cambió la ruta de Helm
-      - 'src/frontend/**'           # Cambió la ruta del código
-      - 'kubernetes/charts/frontend/**' # Cambió la ruta de Helm
-      - '.github/workflows/docker-build.yaml' # Cambió en el workflow mismo
+      - 'src/**'
+      - 'kubernetes/**'
+      - '.github/workflows/**'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }} # Necesario para que el bot pueda volver a subir cambios
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0 #  Cambios entre commits
+
+      # 1. Se detecta qué cambió
+      - name: Check for changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'src/backend/**'
+            frontend:
+              - 'src/frontend/**'
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -25,39 +35,48 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 2. Solo se ejecuta si hubo cambios en la carpeta de Backend
       - name: Build and push backend
+        if: steps.changes.outputs.backend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./src/backend
-          file: ./src/backend/Dockerfile # Dockerfile
+          file: ./src/backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-backend:${{ github.sha }}
 
+      # 3. Solo se ejecuta si hubo cambios en la carpeta de Frontend
       - name: Build and push frontend
+        if: steps.changes.outputs.frontend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./src/frontend
-          file: ./src/frontend/Dockerfile # Dockerfile
+          file: ./src/frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-frontend:${{ github.sha }}
 
-      - name: Update backend Helm Values
+      # 4. Actualizamos los YAMLs (Solo si la app correspondiente cambió)
+      - name: Update Helm Values
         run: |
-          # Usamos sed para actualizar solo la línea del tag en el values.yaml
-          # Buscamos 'tag:' y reemplazamos lo que sigue por el nuevo hash
-          sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/backend/values.yaml
+          if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
+            sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/backend/values.yaml
+          fi
+          
+          if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
+            sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/frontend/values.yaml
+          fi
 
-      - name: Update frontend Helm Values
-        run: |
-          # Usamos sed para actualizar solo la línea del tag en el values.yaml
-          # Buscamos 'tag:' y reemplazamos lo que sigue por el nuevo hash
-          sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/frontend/values.yaml
-
+      # 5. Commit Único
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add kubernetes/charts/backend/values.yaml
-          git commit -m "chore: update backend tag to ${{ github.sha }} [skip ci]" || echo "No changes to commit"
-          git pull --rebase origin main
-          git push origin main
+          git add .
+          # Hacemos commit solo si hay algo en el 'stage'
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update image tags to ${{ github.sha }} [skip ci]"
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No hay cambios que subir."
+          fi
