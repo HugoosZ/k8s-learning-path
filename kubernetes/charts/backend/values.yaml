@@ -3,7 +3,7 @@ replicaCount: 3
 
 image:
   repository: dressy/mi-backend
-  tag: aa5407f7fb931f606bbf7a24f41e697be5a2937f
+  tag: a4b9e66bdfbb069bb419e80eb74837961cdb02a9
 
 containerPort: 5000
 
