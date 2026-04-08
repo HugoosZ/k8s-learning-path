@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Prueba de API</title>
+		<style>
+			:root {
+				--bg: #f4f7fb;
+				--card: #ffffff;
+				--text: #1f2937;
+				--muted: #6b7280;
+				--primary: #0f766e;
+				--primary-hover: #115e59;
+				--ok: #166534;
+				--error: #b91c1c;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: grid;
+				place-items: center;
+				padding: 24px;
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+				background: radial-gradient(circle at top, #e0f2fe 0%, var(--bg) 45%);
+				color: var(--text);
+			}
+
+			.card {
+				width: 100%;
+				max-width: 520px;
+				background: var(--card);
+				border-radius: 14px;
+				box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+				padding: 28px;
+			}
+
+			h1 {
+				margin-top: 0;
+				margin-bottom: 10px;
+				font-size: 1.7rem;
+			}
+
+			p {
+				margin-top: 0;
+				color: var(--muted);
+			}
+
+			button {
+				border: 0;
+				border-radius: 10px;
+				padding: 12px 18px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				color: white;
+				background: var(--primary);
+			}
+
+			button:hover {
+				background: var(--primary-hover);
+			}
+
+			button:disabled {
+				opacity: 0.7;
+				cursor: not-allowed;
+			}
+
+			#resultado {
+				margin-top: 18px;
+				padding: 14px;
+				border-radius: 10px;
+				background: #f8fafc;
+				border: 1px solid #e2e8f0;
+				min-height: 56px;
+				white-space: pre-wrap;
+				word-break: break-word;
+			}
+
+			.ok {
+				color: var(--ok);
+			}
+
+			.error {
+				color: var(--error);
+			}
+		</style>
+	</head>
+	<body>
+		<main class="card">
+			<h1>Frontend de prueba</h1>
+			<p>Haz clic para probar la conexión con la API del backend.</p>
+
+			<button id="btnProbarApi" type="button">Probar API</button>
+
+			<div id="resultado">Sin pruebas aun.</div>
+		</main>
+
+		<script>
+			const boton = document.getElementById("btnProbarApi");
+			const resultado = document.getElementById("resultado");
+
+			boton.addEventListener("click", async () => {
+				boton.disabled = true;
+				resultado.className = "";
+				resultado.textContent = "Consultando API...";
+
+				try {
+					const response = await fetch("/api");
+					const body = await response.text();
+
+					if (!response.ok) {
+						throw new Error(`HTTP ${response.status}: ${body}`);
+					}
+
+					resultado.className = "ok";
+					resultado.textContent = `Respuesta OK:\n${body}`;
+				} catch (error) {
+					resultado.className = "error";
+					resultado.textContent = `Error al llamar la API:\n${error.message}`;
+				} finally {
+					boton.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>

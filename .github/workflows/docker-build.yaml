@@ -6,6 +6,8 @@ on:
     paths:
       - 'src/backend/**'           # Cambió la ruta del código
       - 'kubernetes/charts/backend/**' # Cambió la ruta de Helm
+      - 'src/frontend/**'           # Cambió la ruta del código
+      - 'kubernetes/charts/frontend/**' # Cambió la ruta de Helm
       - '.github/workflows/docker-build.yaml' # Cambió en el workflow mismo
 
 jobs:
@@ -31,11 +33,25 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-backend:${{ github.sha }}
 
-      - name: Update Helm Values
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/frontend
+          file: ./src/frontend/Dockerfile # Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-frontend:${{ github.sha }}
+
+      - name: Update backend Helm Values
         run: |
           # Usamos sed para actualizar solo la línea del tag en el values.yaml
           # Buscamos 'tag:' y reemplazamos lo que sigue por el nuevo hash
           sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/backend/values.yaml
+
+      - name: Update frontend Helm Values
+        run: |
+          # Usamos sed para actualizar solo la línea del tag en el values.yaml
+          # Buscamos 'tag:' y reemplazamos lo que sigue por el nuevo hash
+          sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/frontend/values.yaml
 
       - name: Commit and push changes
         run: |

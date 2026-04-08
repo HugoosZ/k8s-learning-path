@@ -1,0 +1,25 @@
+appName: frontend
+replicaCount: 3
+
+image:
+  repository: dressy/mi-frontend
+  tag: v1
+
+containerPort: 80
+
+service:
+  type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
+  port: 80
+  targetPort: 80
+
+
+ingress:
+  enabled: true
+  className: traefik # Ingress controler nativo de k3s
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix # Regla que permite buscar coincidencias basadas en el inicio de la ruta.
+

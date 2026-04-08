@@ -1,0 +1,32 @@
+apiVersion: apps/v1 # La version va a cambiar depende del tipo de Recurso (En este caso Deployment)
+kind: Deployment
+metadata:
+  name: {{ .Values.appName}}-deployment
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName}}
+    spec:
+      containers:
+        - name: {{ .Values.appName}}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env: 
+            - name: DB_HOST
+              value: {{ .Values.config.db_host | quote }}
+            - name: DB_PORT
+              value: {{ .Values.config.db_port | quote }}
+            - name: DB_USER
+              value: {{ .Values.config.db_user | quote }} 
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.db_secret_name | quote }} 
+                  key: password
+        
