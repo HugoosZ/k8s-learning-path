@@ -17,16 +17,5 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: {{ .Values.containerPort }}
-          env: 
-            - name: DB_HOST
-              value: {{ .Values.config.db_host | quote }}
-            - name: DB_PORT
-              value: {{ .Values.config.db_port | quote }}
-            - name: DB_USER
-              value: {{ .Values.config.db_user | quote }} 
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.config.db_secret_name | quote }} 
-                  key: password
+
         

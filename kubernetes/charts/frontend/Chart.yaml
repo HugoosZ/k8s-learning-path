@@ -5,7 +5,7 @@ description: A frontend Helm chart for Hugo's DevOps lab
 #'application' or a 'library'
 type: application
 
-# Cada vez que se cambies el YAML del chart, se debe actualizar esta versión.
+# Cada vez que se que hayan cambios el YAML del chart, se debe actualizar esta versión.
 version: 0.1.0
 
 # Versión de la APP 
