@@ -11,7 +11,7 @@ spec:
       targetRevision: 5.0.0
       helm:
         valueFiles:
-          - '$values/kubernetes/monitoring/values-db-exporter.yaml'
+          - '$values/kubernetes/monitoring/values-db-exporter.yaml' #el $ indica que busque en la ruta que tiene la ref values.
     
     - repoURL: 'https://github.com/HugoosZ/k8s-learning-path'
       targetRevision: main

@@ -24,3 +24,6 @@ spec:
     automated:
       prune: false # false por si acaso 
       selfHeal: true
+  syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true # Sin esto, argoCD envia a kubernetes toda la confi en una etiqueta y es muy pesado para este. Tira error
