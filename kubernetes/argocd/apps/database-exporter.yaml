@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: database-exporter
+  namespace: argocd
+spec:
+  project: default
+  sources: 
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      chart: prometheus-postgres-exporter
+      targetRevision: 5.0.0
+      helm:
+        valueFiles:
+          - '$values/kubernetes/monitoring/values-db-exporter.yaml'
+    
+    - repoURL: 'https://github.com/HugoosZ/k8s-learning-path'
+      targetRevision: main
+      ref: values # el '$values' arriba
+  
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: db
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
