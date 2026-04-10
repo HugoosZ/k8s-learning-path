@@ -1,0 +1,17 @@
+config:
+  datasourceSecret:
+    # Nombre del Secret que contiene la contraseña de la base de datos
+    name: "db-pass-secret" 
+    # La llave dentro del secret donde está la contraseña
+    key: "password"
+    
+    user: "postgres"
+    host: "postgres-service.backend.svc.cluster.local"
+    port: 5432
+    database: "postgres"
+    sslmode: "disable"
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: prometheus
