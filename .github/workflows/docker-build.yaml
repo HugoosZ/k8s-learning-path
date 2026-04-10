@@ -59,11 +59,11 @@ jobs:
       - name: Update Helm Values
         run: |
           if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
-            sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/backend/values.yaml
+            sed -i '/image:/,/tag:/ s/tag: .*/tag: ${{ github.sha }}/' kubernetes/charts/backend/values.yaml
           fi
           
           if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
-            sed -i "s/tag: .*/tag: ${{ github.sha }}/g" kubernetes/charts/frontend/values.yaml
+            sed -i '/image:/,/tag:/ s/tag: .*/tag: ${{ github.sha }}/' kubernetes/charts/frontend/values.yaml
           fi
 
       # 5. Commit Único
