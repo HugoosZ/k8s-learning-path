@@ -18,7 +18,7 @@ spec:
           ports:
             - containerPort: {{ .Values.containerPort }}
         {{- if .Values.metrics.enabled }}
-        - name: nginx-exporter
+        - name: {{ .Values.metrics.name }}
           image: "{{ .Values.metrics.sidecar.repository }}:{{ .Values.metrics.sidecar.tag }}"
           args:
             - -nginx.scrape-uri={{ .Values.metrics.scrapeUri }}

@@ -7,6 +7,11 @@ image:
 
 containerPort: 5000
 
+metrics:
+  enabled: true
+  name: http-metrics
+
+
 service:
   type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
   port: 80

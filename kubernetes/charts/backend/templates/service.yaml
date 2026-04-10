@@ -11,5 +11,10 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
       name: http
+    {{if .Values.metrics.enabled }}
+    - name: {{ .Values.metrics.name }} # nombre del puerto 5000
+      targetPort: {{ .Values.service.targetPort }} # El puerto de la app con Flask
+      port: {{ .Values.metrics.port }} # Puerto que escucha el Service
+    {{end}}
   selector:
     app: {{ .Values.appName }}

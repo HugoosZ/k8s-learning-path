@@ -14,6 +14,7 @@
     ```
     - Como alternativa segura, se puede usar google secret manager para que se descarguen las contraseñas de ahí o un cifrado asimetrico (Sealed Secrets).
 - Aprender sobre prometheus y victoria metrics. 
+- Configuracion de sidecar para el front. backend no necesita un sidecar porque está montado en python. Se puede configurar python para que hable "Prometheus-ish" nativamente.
 ### Terraform
 1. Ejecucion:
 - terraform init

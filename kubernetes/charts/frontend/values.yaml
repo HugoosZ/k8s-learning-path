@@ -9,11 +9,12 @@ containerPort: 80
 
 metrics:
   enabled: true
+  name: nginx-exporter
   sidecar:
     repository: nginx/nginx-prometheus-exporter
     tag: "1.1.0"
     port: 9113
-  # Esta es la ruta que configuramos en tu nginx.conf
+  # La ruta de nginx.conf
   scrapeUri: "http://localhost:80/nginx_status"
 
 service:

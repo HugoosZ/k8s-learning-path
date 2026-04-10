@@ -4,9 +4,8 @@ FROM python:3.9-slim
 WORKDIR /app
 
 
-# flask: para el servidor web
-# psycopg2-binary: para conectar a Postgres sin dramas
-RUN pip install --no-cache-dir flask psycopg2-binary
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 # main.py en el contenedor
 COPY main.py .
