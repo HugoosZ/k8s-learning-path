@@ -17,5 +17,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: {{ .Values.containerPort }}
-
+        {{- if .Values.metrics.enabled }}
+        - name: nginx-exporter
+          image: "{{ .Values.metrics.sidecar.repository }}:{{ .Values.metrics.sidecar.tag }}"
+          args:
+            - -nginx.scrape-uri={{ .Values.metrics.scrapeUri }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.sidecar.port }}
+        {{- end }}
         

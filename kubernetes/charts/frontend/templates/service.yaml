@@ -11,5 +11,11 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
       name: http
+    {{- if .Values.metrics.enabled }}
+    - name: metrics
+      port: {{ .Values.metrics.sidecar.port }}
+      targetPort: {{ .Values.metrics.sidecar.port }}
+      protocol: TCP
+    {{- end }}
   selector:
     app: {{ .Values.appName }}

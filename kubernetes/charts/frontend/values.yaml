@@ -7,6 +7,15 @@ image:
 
 containerPort: 80
 
+metrics:
+  enabled: true
+  sidecar:
+    repository: nginx/nginx-prometheus-exporter
+    tag: 1.1.0
+    port: 9113
+  # Esta es la ruta que configuramos en tu nginx.conf
+  scrapeUri: "http://localhost:80/nginx_status"
+
 service:
   type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
   port: 80
