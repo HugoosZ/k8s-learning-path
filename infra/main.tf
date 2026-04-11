@@ -47,19 +47,7 @@ resource "google_compute_instance" "k8s_node" {
         systemctl start docker
         systemctl enable docker
         
-        # Darle permisos a Hugo para Docker y K3s
-        usermod -aG docker hugo
-
-        # Esperar a que el archivo de configuración exista antes de continuar
-        until [ -f /etc/rancher/k3s/k3s.yaml ]; do
-          echo "Esperando a K3s..."
-          sleep 5
-        done
         
-        # Ajuste de permisos para que el comando kubectl funcione sin sudo
-        mkdir -p /home/hugo/.kube
-        cp /etc/rancher/k3s/k3s.yaml /home/hugo/.kube/config
-        chown -R hugo:hugo /home/hugo/.kube
     EOT
 
     network_interface {
