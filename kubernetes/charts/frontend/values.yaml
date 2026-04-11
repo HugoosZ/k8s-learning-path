@@ -16,6 +16,11 @@ metrics:
     port: 9113
   # La ruta de nginx.conf
   scrapeUri: "http://localhost:80/nginx_status"
+  serviceMonitor:
+    namespace: monitoring 
+    selector: prometheus
+    interval: 15s
+    port: metrics
 
 service:
   type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
