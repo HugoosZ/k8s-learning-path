@@ -6,7 +6,7 @@ config:
     key: "password"
     
     user: "postgres"
-    host: "postgres-service.backend.svc.cluster.local"
+    host: "db-service.db.svc.cluster.local" # El nombre del service de la base de datos, seguido del namespace y el dominio del cluster.
     port: 5432
     database: "postgres"
     sslmode: "disable"
