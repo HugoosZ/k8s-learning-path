@@ -26,7 +26,7 @@ def test_db():
             dbname="postgres",
             connect_timeout=5 # Para que no se quede pegado si falla
         )
-        return "<h1>Conexión exitosa a la DB desde el Backend!</h1>"
+        return "<h1>Conexión exitosa a la DB desde el Backend</h1>"
     except Exception as e:
         return f"<h1>Error de conexión: {e}</h1>", 500
 

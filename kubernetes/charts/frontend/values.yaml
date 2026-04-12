@@ -23,7 +23,7 @@ metrics:
     port: metrics
 
 service:
-  type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster.
+  type: ClusterIP # Servicio que crea una IP interna virtual. Solo es accesible dentro del cluster
   port: 80
   targetPort: 80
 
