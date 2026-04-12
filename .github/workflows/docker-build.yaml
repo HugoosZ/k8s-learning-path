@@ -24,9 +24,10 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            backend: ['src/backend/**', 'kubernetes/charts/backend/**']
-            frontend: ['src/frontend/**', 'kubernetes/charts/frontend/**']
-            db: ['kubernetes/charts/db/**']
+            backend:
+              - 'src/backend/**'
+            frontend:
+              - 'src/frontend/**'
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -54,37 +55,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mi-frontend:${{ github.sha }}
 
-      # 4. Actualizacion de los YAMLs 
+      # 4. Actualizamos los YAMLs (Solo si la app correspondiente cambió)
       - name: Update Helm Values
         run: |
-          # Función única para incrementar versiones (version o appVersion)
-          bump_key() { #IA
-            local file=$1
-            local key=$2
-            current=$(grep "^$key:" "$file" | awk '{print $2}')
-            next=$(echo $current | awk -F. '{$NF = $NF + 1;} 1' OFS=.)
-            sed -i "s/^$key: .*/$key: $next/" "$file"
-          }
-
-          # Lista de aplicaciones que tienen código fuente (Build + appVersion)
-          APPS=("backend" "frontend")
-          for APP in "${APPS[@]}"; do
-            if [ "${{ steps.changes.outputs[APP] }}" == "true" ]; then
-              echo "Actualizando imagen y appVersion para $APP..."
-              sed -i "/image:/,/tag:/ s/tag: .*/tag: ${{ github.sha }}/" kubernetes/charts/$APP/values.yaml
-              bump_key "kubernetes/charts/$APP/Chart.yaml" "appVersion"
-            fi
-          done
-
-          # Lista de todos los componentes para subir la versión del Chart (Infra)
-          COMPONENTS=("backend" "frontend" "db")
-          for COMP in "${COMPONENTS[@]}"; do
-             # Nota: Aquí puedes usar una lógica extra para detectar si cambió específicamente el Chart
-             if [ "${{ steps.changes.outputs[COMP] }}" == "true" ]; then
-                echo "Subiendo versión del Chart para $COMP..."
-                bump_key "kubernetes/charts/$COMP/Chart.yaml" "version"
-             fi
-          done
+          if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
+            sed -i '/image:/,/tag:/ s/tag: .*/tag: ${{ github.sha }}/' kubernetes/charts/backend/values.yaml
+          fi
+          
+          if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
+            sed -i '/image:/,/tag:/ s/tag: .*/tag: ${{ github.sha }}/' kubernetes/charts/frontend/values.yaml
+          fi
 
       # 5. Commit Único
       - name: Commit and push changes
