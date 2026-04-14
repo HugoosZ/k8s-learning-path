@@ -2,18 +2,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: frontend-monitor
-  namespace: monitoring # El ns donde está Prometheus
+  name: {{ .Values.appName }}-monitor
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }} # El ns donde está Prometheus
   labels:
-    release: prometheus # Debe coincidir con el nombre que se le asignó al instalador cuando se ejecutó el comando de Helm
+    release: {{ .Values.metrics.serviceMonitor.selector }} # Debe coincidir con el nombre que se le asignó al instalador cuando se ejecutó el comando de Helm
 spec:
   selector:
     matchLabels:
-      app: frontend # Debe hacer match con el label de frontend
+      app: {{ .Values.appName }} # Debe hacer match con el label de frontend
   namespaceSelector:
     matchNames:
-      - frontend # Debe hacer match con el ns de frontend
+      - {{ .Values.appName }} # Debe hacer match con el ns de frontend
   endpoints:
-  - port: metrics # El nombre del puerto en el service
-    interval: 15s # Intervalo de recolección
+  - port: {{ .Values.metrics.serviceMonitor.port }} # El nombre del puerto en el service
+    interval: {{ .Values.metrics.serviceMonitor.interval }} # Intervalo de recolección
 {{- end }}
