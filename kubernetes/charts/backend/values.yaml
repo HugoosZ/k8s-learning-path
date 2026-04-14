@@ -11,7 +11,7 @@ metrics:
   enabled: true
   name: http-metrics
   port: 9113
-  servicemonitor:
+  serviceMonitor:
     namespace: monitoring 
     selector: prometheus
     interval: 15s
