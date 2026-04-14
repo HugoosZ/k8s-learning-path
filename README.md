@@ -1,4 +1,7 @@
 # k8s-learning-path
+
+> [!NOTE]
+> Grafana no tiene un storage, por lo que los graficos importados o creados se eliminan.
 ## Dificultades:
 - Aprender sobre helm charts. Gracias a ```helm create "nombre-app"```pude seguir las plantillas.
 - Lanzar Kubernetes en una VM. En sí, las configuraciones asociadas a esto como el host.
