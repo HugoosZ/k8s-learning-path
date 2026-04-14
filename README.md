@@ -44,3 +44,8 @@
 - Se crea el ns "monitoring"" y se instala el stack mediante ```helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring```
 2. Obtencion de contraseña:
 - ```sudo   kubectl --namespace monitoring get secrets prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo```
+
+### Grafana:
+#### Graficos
+- Postgres: 9628
+- NGINX: 12708
