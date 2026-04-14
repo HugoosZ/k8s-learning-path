@@ -16,7 +16,12 @@
 - Aprender sobre prometheus y victoria metrics. 
 - Configuracion de sidecar para el front. backend no necesita un sidecar porque está montado en python. Se puede configurar python para que hable "Prometheus-ish" nativamente.
 ### Terraform
-1. Ejecucion:
+1. Instalación:
+- brew install --cask google-cloud-sdk
+- brew install terraform
+2. Autenticacion:
+- gcloud auth application-default login
+3. Ejecucion:
 - terraform init
 - terraform plan
 - terraform validate (opcional)
