@@ -10,9 +10,8 @@ spec:
   selector:
     matchLabels:
       app: {{.Values.appName }} # Debe hacer match con el label de frontend
-  namespaceSelector:
-    matchNames:
-      - {{.Values.appName}} # ns donde está el frontend
+    namespaceSelector:
+      any: true
   endpoints:
   - port: {{.Values.metrics.serviceMonitor.port}} # El nombre del puerto en el service
     interval: {{.Values.metrics.serviceMonitor.interval}} # Intervalo de recolección
